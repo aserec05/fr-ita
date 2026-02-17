@@ -1,12 +1,34 @@
-# Large data files
+# =========================
+# Large data / models
+# =========================
 data/fasttext_models/
+data/fasttext_wiki/
 data/embeddings/
 data/muse_dictionaries/
+data/models/
+data/processed/
 
-# Keep corpus but not models
+*.vec
+*.bin
+*.pkl
+*.npy
+*.pt
+*.pth
+
+# =========================
+# Generated outputs
+# =========================
+data/visualizations/
+data/results/
+
+# =========================
+# Keep specific corpus file
+# =========================
 !data/corpus_tatoeba.tsv
 
+# =========================
 # Python
+# =========================
 __pycache__/
 *.py[cod]
 *.pyo
@@ -17,23 +39,33 @@ dist/
 build/
 .eggs/
 
+# =========================
 # Virtual environments
+# =========================
 venv/
 env/
 .env/
 
+# =========================
 # IDE
+# =========================
 .vscode/
 .idea/
 *.swp
 *.swo
 
+# =========================
 # OS
+# =========================
 .DS_Store
 Thumbs.db
 
+# =========================
 # Jupyter
+# =========================
 .ipynb_checkpoints/
 
+# =========================
 # Logs
+# =========================
 *.log

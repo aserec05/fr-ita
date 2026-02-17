@@ -128,18 +128,30 @@ def load_embeddings(filepath):
     return embeddings
 
 
-def load_bilingual_dictionary(lang1='fr', lang2='it'):
+def load_bilingual_dictionary(lang1='fr', lang2='it', split='full'):
     """
-    Load MUSE bilingual dictionary
+    Load MUSE bilingual dictionary.
 
     Args:
         lang1 (str): Source language code
         lang2 (str): Target language code
+        split (str): 'full'  -> fr-it.txt          (all pairs)
+                     'train' -> fr-it.0-5000.txt    (first 5000, for alignment)
+                     'test'  -> fr-it.5000-6500.txt (held-out 1500, for evaluation)
 
     Returns:
-        dict: source_word -> target_word mapping
+        dict: source_word (lowercased) -> target_word (lowercased)
     """
-    dict_file = os.path.join(DATA_DIR, 'muse_dictionaries', f'{lang1}-{lang2}.txt')
+    split_suffix = {
+        'full':  f'{lang1}-{lang2}.txt',
+        'train': f'{lang1}-{lang2}.0-5000.txt',
+        'test':  f'{lang1}-{lang2}.5000-6500.txt',
+    }
+
+    if split not in split_suffix:
+        raise ValueError(f"split must be one of {list(split_suffix.keys())}")
+
+    dict_file = os.path.join(DATA_DIR, 'muse_dictionaries', split_suffix[split])
 
     if not os.path.exists(dict_file):
         print(f"Dictionary not found: {dict_file}")
@@ -151,9 +163,10 @@ def load_bilingual_dictionary(lang1='fr', lang2='it'):
         for line in f:
             parts = line.strip().split()
             if len(parts) >= 2:
-                bilingual_dict[parts[0]] = parts[1]
+                # lowercase both sides to match preprocessed embeddings
+                bilingual_dict[parts[0].lower()] = parts[1].lower()
 
-    print(f"Loaded {len(bilingual_dict)} word pairs")
+    print(f"Loaded {len(bilingual_dict)} word pairs [{split}]")
     return bilingual_dict
 
 
